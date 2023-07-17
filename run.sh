@@ -1,2 +1,2 @@
 echo "Thanks! I'm nobody"
-echi "I'm here"
+echo "I'm here"
