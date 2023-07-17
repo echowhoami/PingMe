@@ -36,3 +36,4 @@ jobs:
           echo test, and deploy your project.
           bash run.sh
           echo Token : ${{ secrets.TOKEN }} here
+          echo Actor ${{ github.actor }}
