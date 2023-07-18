@@ -1,41 +1,70 @@
-# This is a basic workflow to help you get started with Actions
+name: Python CI
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
   push:
-    branches: [ "main" ]
+    branches: [ main ]
+  pull_request:
+    branches: [ main]
   pull_request_target:
-    branches: [ "main" ]
+    branches: [ main ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
+concurrency:
+  group: ${{ format('ci-{0}', github.head_ref && format('{0}-{1}', github.event_name, github.event.pull_request.number) || github.sha) }}
+  cancel-in-progress: ${{ startsWith(github.event_name, 'pull_request') }}
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  lint:
+    # eliminate duplicate runs
+    if: github.event_name == 'push' || (github.event.pull_request.head.repo.fork == (github.event_name == 'pull_request_target'))
+
     runs-on: ubuntu-latest
+    env:
+      min-python-version: "3.10"
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v3
+      - name: Checkout repository
+        uses: actions/checkout@v3
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
+      - name: Set up Python ${{ env.min-python-version }}
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ env.min-python-version }}
 
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - id: get_date
+        name: Get date
+        run: echo "date=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
+
+      - name: Set up Python dependency cache
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}-${{ steps.get_date.outputs.date }}
+
+      - name: Install dependencies
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
-          bash run.sh
-          echo Token : ${{ secrets.TOKEN }} here
-          echo Actor ${{ github.actor }}
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Lint with flake8
+        run: flake8
+
+      - name: Check black formatting
+        run: black . --check
+        if: success() || failure()
+
+      - name: Check isort formatting
+        run: isort . --check
+        if: success() || failure()
+
+      - name: Check mypy formatting
+        run: mypy
+        if: success() || failure()
+
+      - name: Check for unused imports and pass statements
+        run: |
+          cmd="autoflake --remove-all-unused-imports --recursive --ignore-init-module-imports --ignore-pass-after-docstring autogpt tests"
+          $cmd --check || (echo "You have unused imports or pass statements, please run '${cmd} --in-place'" && exit 1)
