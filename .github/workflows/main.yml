@@ -1,12 +1,14 @@
 name: Python CI
 
 on:
+  workflow_dispatch:
   push:
     branches: [ main ]
   pull_request:
     branches: [ main]
   pull_request_target:
     branches: [ main ]
+  
 
 concurrency:
   group: ${{ format('ci-{0}', github.head_ref && format('{0}-{1}', github.event_name, github.event.pull_request.number) || github.sha) }}
