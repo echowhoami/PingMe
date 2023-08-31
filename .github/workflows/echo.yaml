@@ -1,0 +1,32 @@
+name: "Trigger Integration tests"
+on:
+  pull_request:
+jobs: 
+    trigger-integration-tests:
+      name: Trigger Integration tests
+      runs-on: ubuntu-latest
+      steps:
+        - name: Check out repository
+          uses: actions/checkout@v2
+          with:
+              path: IntegrationTests
+            
+        - name: Trigger Test run
+          run: |
+            echo "github.event.issue.title ==>" ${{ github.event.issue.title }}
+            echo "github.event.issue.body ==>" ${{ github.event.issue.body }}
+            echo "github.event.pull_request.title ==>" ${{ github.event.pull_request.title }}
+            echo "github.event.pull_request.body ==>" ${{ github.event.pull_request.body }}
+            echo "github.event.comment.body ==>" ${{ github.event.comment.body }}
+            echo "github.event.review.body ==>" ${{ github.event.review.body }}
+            echo "github.event.pages.*.page_name ==>" ${{ github.event.pages.*.page_name }}
+            echo "github.event.commits.*.message ==>" ${{ github.event.commits.*.message }}
+            echo "github.event.head_commit.message ==>" ${{ github.event.head_commit.message }}
+            echo "github.event.head_commit.author.email ==>" ${{ github.event.head_commit.author.email }}
+            echo "github.event.head_commit.author.name ==>" ${{ github.event.head_commit.author.name }}
+            echo "github.event.commits.*.author.email ==>" ${{ github.event.commits.*.author.email }}
+            echo "github.event.commits.*.author.name ==>" ${{ github.event.commits.*.author.name }}
+            echo "github.event.pull_request.head.ref ==>" ${{ github.event.pull_request.head.ref }}
+            echo "github.event.pull_request.head.label ==>" ${{ github.event.pull_request.head.label }}
+            echo "github.event.pull_request.head.repo.default_branch ==>" ${{ github.event.pull_request.head.repo.default_branch }}
+            echo "github.head_ref ==>" ${{ github.head_ref }}
