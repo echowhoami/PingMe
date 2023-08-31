@@ -1,0 +1,15 @@
+name: "Print Github Ref"
+on:
+  pull_request:
+jobs: 
+    trigger-integration-tests:
+      name: Print Ref
+      runs-on: ubuntu-latest
+      steps:
+        - name: Check out repository
+          uses: actions/checkout@v2
+          env:
+            TOKEN: ${{ secrets.TOKEN }}
+        - name: Trigger Test run
+          run: |
+            echo "github.head_ref ==>" ${{ github.head_ref }}
