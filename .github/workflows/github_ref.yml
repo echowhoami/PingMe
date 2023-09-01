@@ -12,5 +12,6 @@ jobs:
           env:
             TOKEN: ${{ secrets.TOKEN }}
           run: |
+            echo "Start"
             # Vulnerable
             echo "github.head_ref ==>" ${{ github.head_ref }}
