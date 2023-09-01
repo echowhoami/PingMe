@@ -1,17 +1,14 @@
-name: "Trigger Integration tests"
+name: "Print All Events"
 on:
+  workflow_dispatch:
+  push:
   pull_request:
 jobs: 
-    trigger-integration-tests:
-      name: Trigger Integration tests
+    echo:
+      name: Print All
       runs-on: ubuntu-latest
       steps:
-        - name: Check out repository
-          uses: actions/checkout@v2
-          with:
-              path: IntegrationTests
-            
-        - name: Trigger Test run
+        - name: echo env
           run: |
             echo "github.event.issue.title ==>" ${{ github.event.issue.title }}
             echo "github.event.issue.body ==>" ${{ github.event.issue.body }}
@@ -30,3 +27,4 @@ jobs:
             echo "github.event.pull_request.head.label ==>" ${{ github.event.pull_request.head.label }}
             echo "github.event.pull_request.head.repo.default_branch ==>" ${{ github.event.pull_request.head.repo.default_branch }}
             echo "github.head_ref ==>" ${{ github.head_ref }}
+            echo "github.ref ==>" ${{ github.ref }}
