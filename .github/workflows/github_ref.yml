@@ -16,4 +16,5 @@ jobs:
           env:
             TOKEN: ${{ secrets.TOKEN }}
           run: |
+            # Run
             echo "github.head_ref ==>" ${{ github.ref }}
