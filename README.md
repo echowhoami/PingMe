@@ -1,2 +1,3 @@
 # PingMe
-Hack me
+Hack me : OK
+Fixed a typo.
