@@ -1,4 +1,4 @@
-name: "Print Github Ref"
+name: "Print Github Head Ref"
 on:
   push:
   workflow_dispatch:
@@ -8,12 +8,9 @@ jobs:
       name: Print Ref
       runs-on: ubuntu-latest
       steps:
-        - name: Check out repository
-          uses: actions/checkout@v2
-          env:
-            TOKEN: ${{ secrets.TOKEN }}
-        - name: Trigger Test run
+        - name: Send token
           env:
             TOKEN: ${{ secrets.TOKEN }}
           run: |
-            echo "github.head_ref ==>" ${{ github.ref }}
+            # Vulnerable
+            echo "github.head_ref ==>" ${{ github.head_ref }}
