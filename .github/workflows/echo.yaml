@@ -9,26 +9,48 @@ jobs:
       runs-on: ubuntu-latest
       steps:
         - name: echo env
+          env:
+            ISSUE_TITLE: ${{ github.event.issue.title }}
+            ISSUE_BODY: ${{ github.event.issue.body }}
+            PR_TITLE: ${{ github.event.pull_request.title }}
+            PR_BODY: ${{ github.event.pull_request.body }}
+            PR_COMMENT : ${{ github.event.comment.body }}
+            REVIEW_BODY: ${{ github.event.review.body }}
+            PAGE_NAME: ${{ toJson(github.event.pages.*.page_name) }}
+            COMMIT_MSG: ${{ toJson(github.event.commits.*.message) }}
+            HEAD_COMMIT_MSG: ${{ github.event.head_commit.message }}
+            EMAIL: ${{ github.event.head_commit.author.email }}
+            NAME: ${{ github.event.head_commit.author.name }}
+            COMMIT_EMAIL: ${{ github.event.commits.*.author.email }}
+            COMMIT_NAME: ${{ toJson(github.event.commits.*.author.name) }}
+            PR_HEAD_REF: ${{ github.event.pull_request.head.ref }}
+            PR_HEAD_LABEL: ${{ github.event.pull_request.head.label }}
+            PR_DEFAULT_BRANCH: ${{ github.event.pull_request.head.repo.default_branch }}
+            HEAD_REF: ${{ github.head_ref }}
+            REF: ${{ github.ref }}
+            REPO: ${{ github.repository }}
+            EVENT: ${{ toJson(github.event) }}
           run: |
-            echo "github.event.issue.title ==>" ${{ github.event.issue.title }}
-            echo "github.event.issue.body ==>" ${{ github.event.issue.body }}
-            echo "github.event.pull_request.title ==>" ${{ github.event.pull_request.title }}
-            echo "github.event.pull_request.body ==>" ${{ github.event.pull_request.body }}
-            echo "github.event.comment.body ==>" ${{ github.event.comment.body }}
-            echo "github.event.review.body ==>" ${{ github.event.review.body }}
-            echo "github.event.pages.*.page_name ==>" ${{ toJson(github.event.pages.*.page_name) }}
-            echo "github.event.commits.*.message ==>" ${{ toJson(github.event.commits.*.message) }}
-            echo "github.event.head_commit.message ==>" ${{ github.event.head_commit.message }}
-            echo "github.event.head_commit.author.email ==>" ${{ github.event.head_commit.author.email }}
-            echo "github.event.head_commit.author.name ==>" ${{ github.event.head_commit.author.name }}
-            echo "github.event.commits.*.author.email ==>" ${{ toJson(github.event.commits.*.author.email) }}
-            echo "github.event.commits.*.author.name ==>" ${{ toJson(github.event.commits.*.author.name) }}
-            echo "github.event.pull_request.head.ref ==>" ${{ github.event.pull_request.head.ref }}
-            echo "github.event.pull_request.head.label ==>" ${{ github.event.pull_request.head.label }}
-            echo "github.event.pull_request.head.repo.default_branch ==>" ${{ github.event.pull_request.head.repo.default_branch }}
-            echo "github.head_ref ==>" ${{ github.head_ref }}
-            echo "github.ref ==>" ${{ github.ref }}
-            echo "github.repository ==>" ${{ github.repository }}
-            echo "github.event ==>" ${{ toJson(github.event) }}
-            echo "============================================================================="
+            echo "github.event.issue.title ==>" ${ISSUE_TITLE}
+            echo "github.event.issue.body ==>" ${ISSUE_BODY}
+            echo "github.event.pull_request.title ==>" ${PR_TITLE}
+            echo "github.event.pull_request.body ==>" ${PR_BODY}
+            echo "github.event.comment.body ==>" ${PR_COMMENT}
+            echo "github.event.review.body ==>" ${REVIEW_BODY}
+            echo "github.event.pages.*.page_name ==>" ${PAGE_NAME}
+            echo "github.event.commits.*.message ==>" ${COMMIT_MSG}
+            echo "github.event.head_commit.message ==>" ${HEAD_COMMIT_MSG}
+            echo "github.event.head_commit.author.email ==>" ${EMAIL}
+            echo "github.event.head_commit.author.name ==>" ${NAME}
+            echo "github.event.commits.*.author.email ==>" ${COMMIT_EMAIL}
+            echo "github.event.commits.*.author.name ==>" ${COMMIT_NAME}
+            echo "github.event.pull_request.head.ref ==>" ${PR_HEAD_REF}
+            echo "github.event.pull_request.head.label ==>" ${PR_HEAD_LABEL}
+            echo "github.event.pull_request.head.repo.default_branch ==>" ${PR_DEFAULT_BRANCH}
+            echo "github.head_ref ==>" ${HEAD_REF}
+            echo "github.ref ==>" ${REF}
+            echo "github.repository ==>" ${REPO}
+            echo "=========================================================================="
+            echo "github.event ==>"  ${EVENT}
             printenv
+            echo "==========================================================================="
