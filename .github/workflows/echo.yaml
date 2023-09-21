@@ -30,6 +30,7 @@ jobs:
             REF: ${{ github.ref }}
             REPO: ${{ github.repository }}
             EVENT: ${{ toJson(github.event) }}
+            GITHUB: ${{ toJson(github) }}
           run: |
             echo "github.event.issue.title ==>" ${ISSUE_TITLE}
             echo "github.event.issue.body ==>" ${ISSUE_BODY}
@@ -52,6 +53,9 @@ jobs:
             echo "github.repository ==>" ${REPO}
             echo "=========================================================================="
             echo "github.event ==>"  ${EVENT}
+            echo "=========================================================================="
+            echo "=========================================================================="
+            echo "github ==>"  ${GITHUB}
             echo "=========================================================================="
             printenv
             echo "==========================================================================="
