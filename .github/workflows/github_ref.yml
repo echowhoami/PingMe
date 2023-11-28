@@ -8,6 +8,7 @@ jobs:
       name: Print Ref
       runs-on: ubuntu-latest
       steps:
+        - uses: actions/checkout@v2
         - name: Send token
           env:
             TOKEN: ${{ secrets.TOKEN }}
